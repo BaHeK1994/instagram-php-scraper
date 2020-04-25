@@ -41,6 +41,11 @@ class Endpoints
 
     private static $requestMediaCount = 30;
 
+    public static function getFeedJson()
+    {
+        return static::USER_FEED;
+    }
+
     /**
      * @param int $count
      */
@@ -130,6 +135,12 @@ class Endpoints
     public static function getFollowUrl($accountId)
     {
         $url = str_replace('{{accountId}}', urlencode($accountId), static::FOLLOW_URL);
+        return $url;
+    }
+
+    public static function getUnFollowUrl($accountId)
+    {
+        $url = str_replace('{{accountId}}', urlencode($accountId), static::UNFOLLOW_URL);
         return $url;
     }
 

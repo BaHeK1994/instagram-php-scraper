@@ -294,6 +294,25 @@ class Instagram
      */
     public function getFeed()
     {
+        $userInfo = $this->getUserProfile();
+        $medias = [];
+        $nodes = (array)@$userInfo["edge_web_feed_timeline"]['edges'];
+        foreach ($nodes as $mediaArray) {
+            $medias[] = Media::create($mediaArray['node']);
+        }
+        return $medias;
+    }
+
+    /**
+     * Gets logged user profile info.
+     *
+     * @throws     \InstagramScraper\Exception\InstagramException
+     * @throws     \InstagramScraper\Exception\InstagramNotFoundException
+     *
+     * @return     Media[]
+     */
+    public function getUserProfile()
+    {
         $response = Request::get(Endpoints::getFeedJson(),
             $this->generateHeaders($this->userSession));
 
@@ -306,12 +325,7 @@ class Instagram
 
         $this->parseCookies($response->headers);
         $jsonResponse = $this->decodeRawBodyToJson($response->raw_body);
-        $medias = [];
-        $nodes = (array)@$jsonResponse['data']['user']["edge_web_feed_timeline"]['edges'];
-        foreach ($nodes as $mediaArray) {
-            $medias[] = Media::create($mediaArray['node']);
-        }
-        return $medias;
+        return (array)@$jsonResponse['data']['user'];
     }
 
     /**
