@@ -240,10 +240,10 @@ class Instagram
                 $headers['x-instagram-gis'] = $gisToken;
             }
         }
-        
+
         if (empty($headers['x-csrftoken'])) {
             $headers['x-csrftoken'] = md5(uniqid()); // this can be whatever, insta doesn't like an empty value
-        }        
+        }
 
         return $headers;
     }
@@ -287,10 +287,10 @@ class Instagram
     /**
      * Gets logged user feed.
      *
-     * @throws     \InstagramScraper\Exception\InstagramException
+     * @return     Media[]
      * @throws     \InstagramScraper\Exception\InstagramNotFoundException
      *
-     * @return     Media[]
+     * @throws     \InstagramScraper\Exception\InstagramException
      */
     public function getFeed()
     {
@@ -306,10 +306,10 @@ class Instagram
     /**
      * Gets logged user profile info.
      *
-     * @throws     \InstagramScraper\Exception\InstagramException
+     * @return     Media[]
      * @throws     \InstagramScraper\Exception\InstagramNotFoundException
      *
-     * @return     Media[]
+     * @throws     \InstagramScraper\Exception\InstagramException
      */
     public function getUserProfile()
     {
@@ -732,7 +732,7 @@ class Instagram
 
             $commentsUrl = Endpoints::getCommentsBeforeCommentIdByCode($variables);
             $response = Request::get($commentsUrl, $this->generateHeaders($this->userSession, $this->generateGisToken($variables)));
-            
+
             if (static::HTTP_OK !== $response->code) {
                 throw new InstagramException('Response code is ' . $response->code . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
             }
@@ -761,7 +761,7 @@ class Instagram
                 $comments[] = Comment::create($commentArray['node']);
                 $index++;
             }
-            
+
             if ($count > $numberOfComments) {
                 $count = $numberOfComments;
             }
@@ -872,7 +872,7 @@ class Instagram
         return $likes;
     }
 
-     /**
+    /**
      * @param string $id
      *
      * @return Account
@@ -1441,10 +1441,10 @@ class Instagram
      *
      * $support_two_step_verification true works only in cli mode - just run login in cli mode - save cookie to file and use in any mode
      *
-     * @throws InstagramAuthException
+     * @return array
      * @throws InstagramException
      *
-     * @return array
+     * @throws InstagramAuthException
      */
     public function login($force = false, $twoStepVerificator = null)
     {
@@ -1546,6 +1546,8 @@ class Instagram
         if (!isset($cookies['ds_user_id'])) {
             return false;
         }
+
+        static::$instanceCache->set($this->getCacheKey(), $cookies);
         return true;
     }
 
