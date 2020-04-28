@@ -1547,7 +1547,7 @@ class Instagram
             return false;
         }
 
-        static::$instanceCache->set($this->getCacheKey(), $cookies);
+        static::$instanceCache->set($this->getCacheKey(), $session + $cookies);
         return true;
     }
 
