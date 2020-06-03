@@ -1669,6 +1669,50 @@ class Instagram
     }
 
     /**
+     * @param int|string|Account $accountId
+     *
+     * @return void
+     * @throws InstagramException
+     */
+    public function follow($accountId)
+    {
+        $accountId = $accountId instanceof Account ? $accountId->getId() : $accountId;
+        $response = Request::post(Endpoints::getFollowUrl($accountId), $this->generateHeaders($this->userSession));
+
+        if ($response->code !== static::HTTP_OK) {
+            throw new InstagramException('Response code is ' . $response->code . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
+        }
+
+        $jsonResponse = $this->decodeRawBodyToJson($response->raw_body);
+
+        if ($jsonResponse['status'] !== 'ok') {
+            throw new InstagramException('Response status is ' . $jsonResponse['status'] . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
+        }
+    }
+
+    /**
+     * @param int|string|Account $accountId
+     *
+     * @return void
+     * @throws InstagramException
+     */
+    public function unfollow($accountId)
+    {
+        $accountId = $accountId instanceof Account ? $accountId->getId() : $accountId;
+        $response = Request::post(Endpoints::getUnFollowUrl($accountId), $this->generateHeaders($this->userSession));
+
+        if ($response->code !== static::HTTP_OK) {
+            throw new InstagramException('Response code is ' . $response->code . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
+        }
+
+        $jsonResponse = $this->decodeRawBodyToJson($response->raw_body);
+
+        if ($jsonResponse['status'] !== 'ok') {
+            throw new InstagramException('Response status is ' . $jsonResponse['status'] . '. Body: ' . static::getErrorBody($response->body) . ' Something went wrong. Please report issue.', $response->code);
+        }
+    }
+
+    /**
      * @param int|string|Media $mediaId
      * @param int|string $text
      * @param int|string|Comment|null $repliedToCommentId
