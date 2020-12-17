@@ -332,7 +332,6 @@ class Instagram
     }
 
 
-
     /**
      * We work only on https in this case if we have same cookies on Secure and not - we will choice Secure cookie
      *
@@ -342,7 +341,7 @@ class Instagram
      */
     private function parseCookies($headers)
     {
-        if($this->customCookies){
+        if ($this->customCookies) {
             return $this->getCustomCookies();
         }
 
@@ -936,7 +935,7 @@ class Instagram
             throw new InstagramException('Response does not JSON');
         }
 
-        if ($responseArray['data']['user'] === null){
+        if ($responseArray['data']['user'] === null) {
             throw new InstagramNotFoundException('Failed to fetch account with given id');
         }
 
@@ -1343,7 +1342,7 @@ class Instagram
                 }
             }
 
-            if (!$hasNextPage) {
+            if (!$hasNextPage && $index < $jsonResponse['data']['user']['edge_followed_by']['count']) {
                 break;
             }
 
@@ -1763,7 +1762,7 @@ class Instagram
         }
 
         // for 2FA case
-        if (! $twoStepVerificator instanceof TwoStepVerificationInterface) {
+        if (!$twoStepVerificator instanceof TwoStepVerificationInterface) {
             throw new InstagramAuthException('$twoStepVerificator must be an instance of TwoStepVerificationInterface.', $response->code);
         }
 
@@ -2069,7 +2068,7 @@ class Instagram
         }
 
         return [
-            'hasOlder' => (bool) $jsonResponse['inbox']['has_older'],
+            'hasOlder' => (bool)$jsonResponse['inbox']['has_older'],
             'oldestCursor' => isset($jsonResponse['inbox']['oldest_cursor']) ? $jsonResponse['inbox']['oldest_cursor'] : null,
             'threads' => $threads,
         ];
