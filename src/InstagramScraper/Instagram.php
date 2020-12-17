@@ -1366,7 +1366,7 @@ class Instagram
             }
 
             $pageInfo = $jsonResponse['data']['user']['edge_follow']['page_info'];
-            if ($pageInfo['has_next_page']) {
+            if ($pageInfo['has_next_page'] && $index < $jsonResponse['data']['user']['edge_follow']['count']) {
                 $endCursor = $pageInfo['end_cursor'];
             } else {
                 break;
