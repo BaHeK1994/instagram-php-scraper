@@ -96,6 +96,11 @@ class Media extends AbstractModel
     protected $videoStandardResolutionUrl = '';
 
     /**
+     * @var integer
+     */
+    protected $videoDuration = '';
+
+    /**
      * @var string
      */
     protected $videoLowBandwidthUrl = '';
@@ -129,6 +134,11 @@ class Media extends AbstractModel
      * @var string
      */
     protected $locationName = '';
+
+    /**
+     * @var bool
+     */
+    protected $commentsDisabled = false;
 
     /**
      * @var string
@@ -352,6 +362,14 @@ class Media extends AbstractModel
     }
 
     /**
+     * @return integer
+     */
+    public function getVideoDuration()
+    {
+        return $this->videoDuration;
+    }
+
+    /**
      * @return string
      */
     public function getVideoLowBandwidthUrl()
@@ -397,6 +415,14 @@ class Media extends AbstractModel
     public function getLocationName()
     {
         return $this->locationName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCommentsDisabled()
+    {
+        return $this->commentsDisabled;
     }
 
     /**
@@ -499,6 +525,9 @@ class Media extends AbstractModel
             case 'link':
                 $this->link = $value;
                 break;
+            case 'comments_disabled':
+                $this->commentsDisabled = $value;
+                break;
             case 'comments':
                 $this->commentsCount = $arr[$prop]['count'];
                 break;
@@ -561,6 +590,9 @@ class Media extends AbstractModel
                 $this->videoLowResolutionUrl = $arr[$prop]['low_resolution']['url'];
                 $this->videoStandardResolutionUrl = $arr[$prop]['standard_resolution']['url'];
                 $this->videoLowBandwidthUrl = $arr[$prop]['low_bandwidth']['url'];
+                break;
+            case 'video_duration':
+                $this->videoDuration = $arr[$prop];
                 break;
             case 'video_resources':
                 foreach ($value as $video) {
@@ -669,9 +701,9 @@ class Media extends AbstractModel
                 $this->createdTime = (int)$value;
                 break;
             case '__typename':
-                if ($value == 'GraphImage') {
+                if ($value == 'GraphImage' || $value == 'GraphStoryImage') {
                     $this->type = static::TYPE_IMAGE;
-                } else if ($value == 'GraphVideo') {
+                } else if ($value == 'GraphVideo' || $value == 'GraphStoryVideo') {
                     $this->type = static::TYPE_VIDEO;
                 } else if ($value == 'GraphSidecar') {
                     $this->type = static::TYPE_SIDECAR;
