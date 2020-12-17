@@ -1342,7 +1342,7 @@ class Instagram
                 }
             }
 
-            if (!$hasNextPage && $index < $jsonResponse['data']['user']['edge_followed_by']['count']) {
+            if (!$hasNextPage || $index >= $jsonResponse['data']['user']['edge_followed_by']['count']) {
                 break;
             }
 
@@ -1487,7 +1487,7 @@ class Instagram
                 }
             }
 
-            if (!$hasNextPage && $index < $jsonResponse['data']['user']['edge_followed_by']['count']) {
+            if (!$hasNextPage || $index >= $jsonResponse['data']['user']['edge_followed_by']['count']) {
                 break;
             }
 
