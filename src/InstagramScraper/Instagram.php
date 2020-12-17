@@ -1487,7 +1487,7 @@ class Instagram
                 }
             }
 
-            if (!$hasNextPage) {
+            if (!$hasNextPage && $index < $jsonResponse['data']['user']['edge_followed_by']['count']) {
                 break;
             }
 
